@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 const assetPrefix = "/bill";
@@ -61,7 +62,7 @@ export default function Home() {
         >
           Powered by{" "}
           <span className={styles.logo}>
-            <img
+            <Image
               src={`${assetPrefix}/vercel.svg`}
               alt="Vercel Logo"
               width={72}
