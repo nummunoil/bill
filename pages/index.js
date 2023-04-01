@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>splitting bills with friends</title>
+        <title>Splitting bills with friends</title>
         <meta
           name="Drop some money"
           content="Check, check, check, check that money"

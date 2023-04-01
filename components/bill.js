@@ -1,56 +1,67 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
+import SlideOver from "./slide";
 
 const assetPrefix = "/bill";
 
 export default function Bill() {
+  const [open, setOpen] = useState(true);
   const [billName, setBillName] = useState("bill name");
   return (
     <div>
-      <div className="bg-gray-500 text-white rounded-md px-5 py-2 text-lg font-medium">
+      <SlideOver clickOpen={open} />
+      <div
+        className="bg-gray-500 text-white rounded-md px-5 py-2 text-lg font-medium"
+        onClick={() => setOpen(!open)}
+      >
         {billName}
       </div>
-      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">
+
+      <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div className="px-4 py-5 sm:px-6">
+          <h3 className="text-base font-semibold leading-6 text-gray-900">
             Applicant Information
           </h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          <p className="mt-1 max-w-2xl text-sm text-gray-500">
             Personal details and application.
           </p>
         </div>
-        <div class="border-t border-gray-200">
+        <div className="border-t border-gray-200">
           <dl>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Full name</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Full name</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 Margot Foster
               </dd>
             </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Application for</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">
+                Application for
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 Backend Developer
               </dd>
             </div>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Email address</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">
+                Email address
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 margotfoster@example.com
               </dd>
             </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">
+            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">
                 Salary expectation
               </dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 $120,000
               </dd>
             </div>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">About</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">About</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
                 incididunt cillum culpa consequat. Excepteur qui ipsum aliquip
                 consequat sint. Sit id mollit nulla mollit nostrud in ea officia
@@ -58,17 +69,17 @@ export default function Bill() {
                 reprehenderit deserunt qui eu.
               </dd>
             </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Attachments</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Attachments</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 <ul
                   role="list"
-                  class="divide-y divide-gray-200 rounded-md border border-gray-200"
+                  className="divide-y divide-gray-200 rounded-md border border-gray-200"
                 >
-                  <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                    <div class="flex w-0 flex-1 items-center">
+                  <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <div className="flex w-0 flex-1 items-center">
                       <svg
-                        class="h-5 w-5 flex-shrink-0 text-gray-400"
+                        className="h-5 w-5 flex-shrink-0 text-gray-400"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         aria-hidden="true"
@@ -79,23 +90,23 @@ export default function Bill() {
                           clip-rule="evenodd"
                         />
                       </svg>
-                      <span class="ml-2 w-0 flex-1 truncate">
+                      <span className="ml-2 w-0 flex-1 truncate">
                         resume_back_end_developer.pdf
                       </span>
                     </div>
-                    <div class="ml-4 flex-shrink-0">
+                    <div className="ml-4 flex-shrink-0">
                       <a
                         href="#"
-                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                        className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
                         Download
                       </a>
                     </div>
                   </li>
-                  <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                    <div class="flex w-0 flex-1 items-center">
+                  <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <div className="flex w-0 flex-1 items-center">
                       <svg
-                        class="h-5 w-5 flex-shrink-0 text-gray-400"
+                        className="h-5 w-5 flex-shrink-0 text-gray-400"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         aria-hidden="true"
@@ -106,14 +117,14 @@ export default function Bill() {
                           clip-rule="evenodd"
                         />
                       </svg>
-                      <span class="ml-2 w-0 flex-1 truncate">
+                      <span className="ml-2 w-0 flex-1 truncate">
                         coverletter_back_end_developer.pdf
                       </span>
                     </div>
-                    <div class="ml-4 flex-shrink-0">
+                    <div className="ml-4 flex-shrink-0">
                       <a
                         href="#"
-                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                        className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
                         Download
                       </a>

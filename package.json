@@ -15,6 +15,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@headlessui/react": "^1.7.13",
     "autoprefixer": "^10.4.14",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
