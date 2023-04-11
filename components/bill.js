@@ -1,24 +1,64 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SlideOver from "./slide";
+import BillName from "./bill_name";
+import PromptPay from "./prompt_pay";
+import Overall from "./overall";
+import Option from "./option";
+import Equal from "./equal";
 
 const assetPrefix = "/bill";
 
+const EQ_OPTION = 1;
+const NEQ_OPTION = 2;
+
 export default function Bill() {
-  const [open, setOpen] = useState(true);
-  const [billName, setBillName] = useState("bill name");
+  // const [open, setOpen] = useState(false);
+  // const [selected, setSelected] = useState(1);
+
+  // useEffect(() => {
+  //   async function settingData() {
+  //     const current = await localStorage.getItem("option");
+  //     console.log("current : ", current);
+  //     if (current) setSelected(current);
+  //   }
+  //   console.log("selected 1: ", selected);
+  //   settingData();
+  //   console.log("selected 2: ", selected);
+  //   // const option = localStorage.getItem("option");
+  //   // if (option) {
+  //   //   setSelected(option);
+  //   // }
+  // }, []);
+
+  const [selectedOption, setSelectedOption] = useState(EQ_OPTION);
+  const [total, setTotal] = useState("0");
+  const [people, setPeople] = useState("1");
+  const [pay, setPay] = useState("0 บาท");
+
   return (
     <div>
-      <SlideOver clickOpen={open} />
-      <div
-        className="bg-gray-500 text-white rounded-md px-5 py-2 text-lg font-medium"
-        onClick={() => setOpen(!open)}
-      >
-        {billName}
+      {/* <SlideOver clickOpen={open} /> */}
+      <BillName />
+      <div className="grid grid-cols-1 sm:grid-cols-3 place-items-center">
+        <PromptPay />
+        <Overall pay={pay} people={people} />
+        <Option selected={selectedOption} setSelected={setSelectedOption} />
       </div>
 
-      <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+      {selectedOption === EQ_OPTION && (
+        <Equal
+          total={total}
+          setTotal={setTotal}
+          people={people}
+          setPeople={setPeople}
+          pay={pay}
+          setPay={setPay}
+        />
+      )}
+
+      {/* <div className="overflow-hidden bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-base font-semibold leading-6 text-gray-900">
             Applicant Information
@@ -135,7 +175,7 @@ export default function Bill() {
             </div>
           </dl>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
