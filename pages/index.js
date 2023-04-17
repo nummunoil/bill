@@ -15,7 +15,11 @@ export default function Home() {
         <link rel="icon" href={`${assetPrefix}/favicon.ico`} />
       </Head>
       <Bill />
-      <footer className="m-auto p-2 text-center">Powered by Nummunoil</footer>
+      <footer className="m-auto px-6 py-2 text-center">
+        <div className="border-t border-gray-900/10 pt-2">
+          Powered by Nummunoil
+        </div>
+      </footer>
     </div>
   );
 }

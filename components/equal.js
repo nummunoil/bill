@@ -31,16 +31,16 @@ const Equal = ({ total, setTotal, people, setPeople, pay, setPay }) => {
   };
 
   return (
-    <div className="p-6">
-      <div className="border-b border-gray-900/10 pb-12">
+    <div className="px-6">
+      <div className="pb-2">
         <h2 className="text-base font-semibold leading-7 text-gray-900">
           หารเท่ากันทุกคนนะ
         </h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
-          เราปัดเศษทศนิยมให้เหลือสองตำแหน่งด้วยนะ จะโอนแบบปัดต่อก็ได้จ้า
+          เราปัดเศษทศนิยมให้เหลือสูงสุดสองตัวจ้า
         </p>
 
-        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-2 sm:col-start-1">
             <label
               htmlFor="total"

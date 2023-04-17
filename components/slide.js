@@ -1,43 +1,42 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import PromptPay from "./prompt_pay";
 
-const people = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More people...
-];
+export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
+  const [inputData, setInputData] = useState("");
+  const [peopleList, setPeopleList] = useState([]);
 
-export default function SlideOver({ clickOpen }) {
-  const [open, setOpen] = useState(true);
-  useEffect(() => {
-    setOpen(true);
+  const handleAddData = () => {
+    const newList = [...peopleList, { name: inputData, total: 0 }];
+    cal(newList);
+    setInputData("");
+  };
 
-    return () => {
-      clickOpen;
-    };
-  }, [clickOpen]);
+  const handleRemoveData = (indexToRemove) => {
+    const newList = peopleList.filter((_, index) => index !== indexToRemove);
+    cal(newList);
+  };
+
+  const cal = (newList) => {
+    const length = newList.length;
+
+    const totalF = parseFloat(total.replace(/,/g, ""));
+    const newTotal = totalF / length;
+    const checked = newTotal === Infinity ? 0 : newTotal;
+    const rounded = Math.ceil(checked * 100) / 100;
+    const formattedPay = Number(rounded).toLocaleString();
+
+    const newPeopleList = newList.map((person) => ({
+      ...person,
+      total: formattedPay,
+    }));
+
+    const formattedPeople = Number(length).toLocaleString();
+    setPeople(formattedPeople);
+    setPay(formattedPay);
+
+    setPeopleList(newPeopleList);
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -56,7 +55,7 @@ export default function SlideOver({ clickOpen }) {
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -84,13 +83,13 @@ export default function SlideOver({ clickOpen }) {
                               className="h-6 w-6"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="currentColor"
                               aria-hidden="true"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 d="M6 18L18 6M6 6l12 12"
                               />
                             </svg>
@@ -104,82 +103,76 @@ export default function SlideOver({ clickOpen }) {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {people.map((person, index) => (
-                              <li
-                                key={`product_${index}`}
-                                className="flex py-6"
-                              >
-                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  {person.imageAlt}
-                                  {/* <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
-                                  /> */}
-                                </div>
-
-                                <div className="ml-4 flex flex-1 flex-col">
-                                  <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
-                                      <h3>
-                                        <a href={person.href}>{person.name}</a>
-                                      </h3>
-                                      <p className="ml-4">{person.price}</p>
+                            {peopleList.length === 0 ? (
+                              <div className="text-center pt-4">
+                                กรุณาเพิ่มรายชื่อ
+                              </div>
+                            ) : (
+                              peopleList.map((person, index) => (
+                                <li
+                                  key={`product_${index}`}
+                                  className="flex py-2"
+                                >
+                                  <div className="ml-4 flex flex-1 flex-col">
+                                    <div>
+                                      <div className="flex justify-between text-base font-medium text-gray-900">
+                                        <h3>{person.name}</h3>
+                                        <p className="ml-4">{person.total}</p>
+                                      </div>
                                     </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                      {person.color}
-                                    </p>
-                                  </div>
-                                  <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">
-                                      Qty {person.quantity}
-                                    </p>
-
-                                    <div className="flex">
-                                      <button
-                                        type="button"
-                                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      >
-                                        Remove
-                                      </button>
+                                    <div className="flex flex-1 items-end justify-end text-sm">
+                                      <div className="flex">
+                                        <button
+                                          type="button"
+                                          className="font-medium text-blue-600 hover:text-blue-500"
+                                          onClick={() =>
+                                            handleRemoveData(index)
+                                          }
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
+                                </li>
+                              ))
+                            )}
                           </ul>
                         </div>
                       </div>
                     </div>
 
-                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
-                        <p>Subtotal</p>
-                        <p>$262.00</p>
-                      </div>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        Shipping and taxes calculated at checkout.
-                      </p>
-                      <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                          Checkout
-                        </a>
-                      </div>
-                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                        <p>
-                          or
-                          <button
-                            type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
-                          >
-                            Continue Shopping
-                            <span aria-hidden="true"> &rarr;</span>
-                          </button>
-                        </p>
+                    <div className="border-t border-gray-200 px-2 py-6 sm:px-6">
+                      <div className="flex justify-between">
+                        <div className="overflow-auto">
+                          <PromptPay />
+                        </div>
+                        <div className="flex flex-col justify-center">
+                          <div className="flex justify-between text-sm sm:text-base font-medium text-gray-900">
+                            <p>จำนวนเงินทั้งหมด</p>
+                            <p>฿ {total}</p>
+                          </div>
+                          <p className="mt-8 text-sm sm:text-base">
+                            เพิ่มรายชื่อ
+                          </p>
+                          <div className="mt-2 text-sm sm:text-base">
+                            <div className="flex">
+                              <input
+                                type="text"
+                                value={inputData}
+                                onChange={(e) => setInputData(e.target.value)}
+                                className="flex-1 border-b border-blue-300 block w-full"
+                                placeholder="ระบุชื่อ"
+                              />
+                              <button
+                                className="flex-initial bg-blue-300 rounded-md px-2 py-1"
+                                onClick={handleAddData}
+                              >
+                                เพิ่มคน
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
