@@ -36,10 +36,17 @@ export default function Bill() {
   const [total, setTotal] = useState("0");
   const [people, setPeople] = useState("1");
   const [pay, setPay] = useState("0 บาท");
+  const [openSlide, setOpenSlide] = useState(false);
 
   return (
-    <div>
-      {/* <SlideOver clickOpen={open} /> */}
+    <div className="mb-20">
+      <SlideOver
+        open={openSlide}
+        setOpen={setOpenSlide}
+        total={total}
+        setPeople={setPeople}
+        setPay={setPay}
+      />
       <BillName />
       <div className="grid grid-cols-1 sm:grid-cols-3 place-items-center">
         <PromptPay />
@@ -48,14 +55,22 @@ export default function Bill() {
       </div>
 
       {selectedOption === EQ_OPTION && (
-        <Equal
-          total={total}
-          setTotal={setTotal}
-          people={people}
-          setPeople={setPeople}
-          pay={pay}
-          setPay={setPay}
-        />
+        <>
+          <Equal
+            total={total}
+            setTotal={setTotal}
+            people={people}
+            setPeople={setPeople}
+            pay={pay}
+            setPay={setPay}
+          />
+          <div
+            className="px-6 text-xs text-right hover:cursor-pointer underline"
+            onClick={() => setOpenSlide(true)}
+          >
+            ระบุชื่อและจำนวนเงิน
+          </div>
+        </>
       )}
 
       {/* <div className="overflow-hidden bg-white shadow sm:rounded-lg">
