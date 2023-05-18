@@ -1,10 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import PromptPay from "./prompt_pay";
 
 export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
   const [inputData, setInputData] = useState("");
   const [peopleList, setPeopleList] = useState([]);
+  const [fixIndex, setFixIndex] = useState([]);
+  const [newTotal, setNewTotal] = useState(0);
 
   const handleAddData = () => {
     const newList = [...peopleList, { name: inputData, total: 0 }];
@@ -18,6 +20,7 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
   };
 
   const cal = (newList) => {
+    setFixIndex([]);
     const length = newList.length;
 
     const totalF = parseFloat(total.replace(/,/g, ""));
@@ -34,6 +37,38 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
     const formattedPeople = Number(length).toLocaleString();
     setPeople(formattedPeople);
     setPay(formattedPay);
+
+    setPeopleList(newPeopleList);
+  };
+
+  const fixPay = (indexFix, value) => {
+    const set = new Set(fixIndex);
+    set.add(indexFix);
+    const newFixIndex = Array.from(set);
+    setFixIndex(newFixIndex);
+    const length = peopleList.length - newFixIndex.length;
+    const updatedList = [...peopleList];
+    updatedList[indexFix].total = Number(value).toLocaleString();
+    const fixPay = newFixIndex.reduce(
+      (total, index) =>
+        total + parseFloat(updatedList[index].total.replace(/,/g, "")),
+      0
+    );
+    if (length <= 0) {
+      setNewTotal(Number(fixPay).toLocaleString());
+    }
+    const totalF = parseFloat(total.replace(/,/g, ""));
+    const newTotal = (totalF - fixPay) / length;
+    const checked = newTotal === Infinity ? 0 : newTotal;
+    const rounded = Math.ceil(checked * 100) / 100;
+    const formattedPay = Number(rounded).toLocaleString();
+    const newPeopleList = updatedList.map((person, index) => {
+      if (newFixIndex.includes(index)) return person;
+      return {
+        ...person,
+        total: formattedPay,
+      };
+    });
 
     setPeopleList(newPeopleList);
   };
@@ -117,7 +152,17 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>{person.name}</h3>
-                                        <p className="ml-4">{person.total}</p>
+                                        <input
+                                          type="text"
+                                          className="ml-4 text-right"
+                                          value={person.total}
+                                          onChange={(e) =>
+                                            fixPay(
+                                              index,
+                                              e.target.value.replace(/\D/g, "")
+                                            )
+                                          }
+                                        />
                                       </div>
                                     </div>
                                     <div className="flex flex-1 items-end justify-end text-sm">
@@ -150,7 +195,7 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
                         <div className="flex flex-col justify-center">
                           <div className="flex justify-between text-sm sm:text-base font-medium text-gray-900">
                             <p>จำนวนเงินทั้งหมด</p>
-                            <p>฿ {total}</p>
+                            <p>฿ {newTotal || total}</p>
                           </div>
                           <p className="mt-8 text-sm sm:text-base">
                             เพิ่มรายชื่อ
