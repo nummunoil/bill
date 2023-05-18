@@ -8,6 +8,11 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
   const [fixIndex, setFixIndex] = useState([]);
   const [newTotal, setNewTotal] = useState(0);
 
+  useEffect(() => {
+    setNewTotal(0);
+    setPeopleList([]);
+  }, [total]);
+
   const handleAddData = () => {
     const newList = [...peopleList, { name: inputData, total: 0 }];
     cal(newList);
