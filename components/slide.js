@@ -13,6 +13,12 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
     setPeopleList([]);
   }, [total]);
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      handleAddData();
+    }
+  };
+
   const handleAddData = () => {
     const newList = [...peopleList, { name: inputData, total: 0 }];
     cal(newList);
@@ -154,34 +160,32 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
                                   className="flex py-2"
                                 >
                                   <div className="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                      <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <h3>{person.name}</h3>
-                                        <input
-                                          type="text"
-                                          className="ml-4 text-right"
-                                          value={person.total}
-                                          onChange={(e) =>
-                                            fixPay(
-                                              index,
-                                              e.target.value.replace(/\D/g, "")
-                                            )
-                                          }
-                                        />
-                                      </div>
+                                    <div className="flex justify-between text-base font-medium text-gray-900">
+                                      <h3>{person.name}</h3>
+                                      <input
+                                        type="text"
+                                        className="ml-4 text-right"
+                                        value={person.total}
+                                        onChange={(e) =>
+                                          fixPay(
+                                            index,
+                                            e.target.value.replace(/\D/g, "")
+                                          )
+                                        }
+                                      />
                                     </div>
-                                    <div className="flex flex-1 items-end justify-end text-sm">
-                                      <div className="flex">
-                                        <button
-                                          type="button"
-                                          className="font-medium text-blue-600 hover:text-blue-500"
-                                          onClick={() =>
-                                            handleRemoveData(index)
-                                          }
-                                        >
-                                          Remove
-                                        </button>
-                                      </div>
+                                    <div className="flex flex-1 items-end justify-between text-sm">
+                                      <span className="text-xs text-red-500">
+                                        {fixIndex.includes(index) &&
+                                          "ช่วยออกเท่านี้นะ!!"}
+                                      </span>
+                                      <button
+                                        type="button"
+                                        className="font-medium text-blue-600 hover:text-blue-500"
+                                        onClick={() => handleRemoveData(index)}
+                                      >
+                                        Remove
+                                      </button>
                                     </div>
                                   </div>
                                 </li>
@@ -213,6 +217,7 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
                                 onChange={(e) => setInputData(e.target.value)}
                                 className="flex-1 border-b border-blue-300 block w-full"
                                 placeholder="ระบุชื่อ"
+                                onKeyDown={handleKeyDown}
                               />
                               <button
                                 className="flex-initial bg-blue-300 rounded-md px-2 py-1"
