@@ -1,24 +1,13 @@
-import { useEffect, useState } from "react";
-
-const statsInit = [
-  { id: 1, name: "จำนวนเงินรวม", value: "- บาท" },
-  { id: 2, name: "จำนวนคนทั้งหมด", value: "- คน" },
-];
-
 export default function Overall({ pay, people }) {
-  const [stats, setStats] = useState(statsInit);
+  const p1 = parseFloat(pay.replace(/,/g, ""));
+  const p2 = parseFloat(people.replace(/,/g, ""));
+  const total = p1 * p2;
+  const formattedTotal = Number(total).toLocaleString();
 
-  useEffect(() => {
-    const p1 = parseFloat(pay.replace(/,/g, ""));
-    const p2 = parseFloat(people.replace(/,/g, ""));
-    const total = p1 * p2;
-    const formattedTotal = Number(total).toLocaleString();
-
-    setStats([
-      { id: 1, name: "จำนวนเงินรวม", value: `${formattedTotal} บาท` },
-      { id: 2, name: "จำนวนคนทั้งหมด", value: `${people} คน` },
-    ]);
-  }, [pay, people]);
+  const stats = [
+    { id: 1, name: "จำนวนเงินรวม", value: `${formattedTotal} บาท` },
+    { id: 2, name: "จำนวนคนทั้งหมด", value: `${people} คน` },
+  ];
 
   return (
     <div className="bg-white py-2 sm:py-3">
