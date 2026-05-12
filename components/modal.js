@@ -23,7 +23,10 @@ export default function Modal({ toggle, setToggle, setPp }) {
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={() => {
+          setOpen(false);
+          setToggle(false);
+        }}
       >
         <Transition.Child
           as={Fragment}
