@@ -7,6 +7,7 @@ import PromptPay from "./prompt_pay";
 import Overall from "./overall";
 import Option from "./option";
 import Equal from "./equal";
+import Proportional from "./proportional";
 
 const assetPrefix = "/bill";
 
@@ -34,9 +35,51 @@ export default function Bill() {
 
   const [selectedOption, setSelectedOption] = useState(EQ_OPTION);
   const [total, setTotal] = useState("0");
-  const [people, setPeople] = useState("1");
   const [pay, setPay] = useState("0 บาท");
   const [openSlide, setOpenSlide] = useState(false);
+
+  // Source of truth for "จำนวนคนทั้งหมด" — used by both EQ and NEQ.
+  const [peopleArr, setPeopleArr] = useState([
+    { id: "p1", name: "", discount: 0, discountType: "baht" },
+  ]);
+
+  // NEQ wizard state — lifted here so it persists across option toggle.
+  const [items, setItems] = useState([]);
+  const [vat, setVat] = useState(0);
+  const [service, setService] = useState(0);
+  const [billDiscount, setBillDiscount] = useState(0);
+  const [billDiscountType, setBillDiscountType] = useState("percent");
+
+  // Adapt peopleArr ↔ Equal/SlideOver's (people string, setPeople) interface.
+  const people = String(peopleArr.length);
+  const setPeople = (str) => {
+    const n = parseInt(String(str).replace(/,/g, "")) || 0;
+    setPeopleArr((prev) => {
+      if (n === prev.length) return prev;
+      if (n > prev.length) {
+        const base = Date.now();
+        const extra = [];
+        for (let i = prev.length; i < n; i++) {
+          extra.push({
+            id: `p${base}_${i}`,
+            name: "",
+            discount: 0,
+            discountType: "baht",
+          });
+        }
+        return [...prev, ...extra];
+      }
+      // shrink: trim from the end, clean removed ids out of items[].eaters
+      const removedIds = new Set(prev.slice(n).map((p) => p.id));
+      setItems((items) =>
+        items.map((it) => ({
+          ...it,
+          eaters: it.eaters.filter((id) => !removedIds.has(id)),
+        })),
+      );
+      return prev.slice(0, n);
+    });
+  };
 
   return (
     <div className="mb-20">
@@ -72,6 +115,26 @@ export default function Bill() {
           </div>
         </>
       )}
+
+      <div className={selectedOption === NEQ_OPTION ? "" : "hidden"}>
+        <Proportional
+          selectedOption={selectedOption}
+          peopleArr={peopleArr}
+          setPeopleArr={setPeopleArr}
+          items={items}
+          setItems={setItems}
+          vat={vat}
+          setVat={setVat}
+          service={service}
+          setService={setService}
+          billDiscount={billDiscount}
+          setBillDiscount={setBillDiscount}
+          billDiscountType={billDiscountType}
+          setBillDiscountType={setBillDiscountType}
+          setTotal={setTotal}
+          setPay={setPay}
+        />
+      </div>
 
       {/* <div className="overflow-hidden bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
