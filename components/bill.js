@@ -82,7 +82,7 @@ export default function Bill() {
   };
 
   return (
-    <div className="mb-20">
+    <div className="mb-8">
       <SlideOver
         open={openSlide}
         setOpen={setOpenSlide}

@@ -1,7 +1,9 @@
+import { useState } from "react";
 import StepPeople from "./steps/StepPeople";
 import StepItems from "./steps/StepItems";
 import StepTick from "./steps/StepTick";
 import StepSummary from "./steps/StepSummary";
+import SummaryModal from "../summary-modal";
 
 const STEPS = ["คน", "เมนู", "ติ๊กคน", "สรุป"];
 const TITLES = [
@@ -12,8 +14,19 @@ const TITLES = [
 ];
 
 export default function WizardMobile(props) {
-  const { step, setStep } = props;
+  const { step, setStep, peopleArr, result } = props;
   const [title, subtitle] = TITLES[step];
+  const [summaryOpen, setSummaryOpen] = useState(false);
+
+  function openSummary() {
+    const pp =
+      (typeof window !== "undefined" && localStorage.getItem("pp")) || "";
+    if (!pp) {
+      alert("กรุณาเพิ่ม PromptPay ก่อน");
+      return;
+    }
+    setSummaryOpen(true);
+  }
 
   return (
     <div className="px-4 py-3">
@@ -63,6 +76,23 @@ export default function WizardMobile(props) {
           ถัดไป →
         </button>
       )}
+
+      {step === 3 && (
+        <button
+          type="button"
+          onClick={openSummary}
+          className="mt-5 w-full rounded-xl bg-blue-600 px-4 py-3 text-base font-semibold text-white hover:bg-blue-700"
+        >
+          ดูสรุปบิล
+        </button>
+      )}
+
+      <SummaryModal
+        open={summaryOpen}
+        setOpen={setSummaryOpen}
+        peopleArr={peopleArr}
+        result={result}
+      />
     </div>
   );
 }

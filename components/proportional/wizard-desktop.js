@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { fmt } from "../../lib/bill-calc";
 import { Avatar, Eyebrow } from "./atoms";
+import SummaryModal from "../summary-modal";
 
 // 3-column "Bill Splitter v2" layout: People | Items | Summary.
 // Locked grid (320 | 1fr | 340) per design handoff — no responsive collapse.
@@ -164,15 +166,27 @@ export default function WizardDesktop({
   toggleEater,
   updatePerson,
 }) {
+  const [summaryOpen, setSummaryOpen] = useState(false);
+
   const filteredItems =
     activePid === "all"
       ? items
       : items.filter((it) => it.eaters.includes(activePid));
   const activePerson = peopleArr.find((p) => p.id === activePid);
 
+  function openSummary() {
+    const pp =
+      (typeof window !== "undefined" && localStorage.getItem("pp")) || "";
+    if (!pp) {
+      alert("กรุณาเพิ่ม PromptPay ก่อน");
+      return;
+    }
+    setSummaryOpen(true);
+  }
+
   return (
     <div
-      className="mx-auto grid gap-4 pb-12 pt-4"
+      className="mx-auto grid gap-4 pt-4"
       style={{ gridTemplateColumns: "320px 1fr 340px", maxWidth: 1440 }}
     >
       {/* LEFT: people */}
@@ -395,7 +409,22 @@ export default function WizardDesktop({
             ฿{fmt(result.finalTotal)}
           </span>
         </div>
+
+        <button
+          type="button"
+          onClick={openSummary}
+          className="mt-3 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+          ดูสรุปบิล
+        </button>
       </div>
+
+      <SummaryModal
+        open={summaryOpen}
+        setOpen={setSummaryOpen}
+        peopleArr={peopleArr}
+        result={result}
+      />
     </div>
   );
 }

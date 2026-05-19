@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Modal from "./modal";
 
-const PromptPay = () => {
+const PromptPay = ({ readOnly = false }) => {
   const [pp, setPp] = useState("");
   const [toggle, setToggle] = useState(false);
 
@@ -14,12 +14,15 @@ const PromptPay = () => {
   }, []);
 
   const openEditModal = () => {
+    if (readOnly) return;
     setToggle(true);
   };
 
   return (
     <div>
-      {toggle && <Modal toggle={toggle} setPp={setPp} setToggle={setToggle} />}
+      {!readOnly && toggle && (
+        <Modal toggle={toggle} setPp={setPp} setToggle={setToggle} />
+      )}
       <div
         className="p-2 mb-2 grid justify-items-center"
         onClick={openEditModal}
