@@ -43,7 +43,7 @@ export default function StepTick({
 
       {tickMode === "item" && items.length === 0 && (
         <div className="rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-500">
-          ยังไม่มีเมนู — กลับไปที่ขั้น "เมนู" เพื่อเพิ่มก่อน
+          ยังไม่มีเมนู — กลับไปที่ขั้น &quot;เมนู&quot; เพื่อเพิ่มก่อน
         </div>
       )}
 
