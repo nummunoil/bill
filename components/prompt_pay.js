@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Modal from "./modal";
 
-const PromptPay = () => {
+const PromptPay = ({ readOnly = false }) => {
   const [pp, setPp] = useState("");
   const [toggle, setToggle] = useState(false);
 
@@ -14,12 +14,15 @@ const PromptPay = () => {
   }, []);
 
   const openEditModal = () => {
+    if (readOnly) return;
     setToggle(true);
   };
 
   return (
     <div>
-      {toggle && <Modal toggle={toggle} setPp={setPp} setToggle={setToggle} />}
+      {!readOnly && toggle && (
+        <Modal toggle={toggle} setPp={setPp} setToggle={setToggle} />
+      )}
       <div
         className="p-2 mb-2 grid justify-items-center"
         onClick={openEditModal}
@@ -30,8 +33,8 @@ const PromptPay = () => {
             <Image
               src={`https://promptpay.io/${pp}.png`}
               alt="พร้อมเพย์"
-              width="0"
-              height="0"
+              width={128}
+              height={128}
               className="w-32 h-32"
             />
             <div className="text-center text-xs">{pp}</div>
@@ -41,8 +44,8 @@ const PromptPay = () => {
             <Image
               src={`https://promptpay.io/0000000000.png`}
               alt="พร้อมเพย์"
-              width="0"
-              height="0"
+              width={128}
+              height={128}
               className="w-full"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-700 font-bold bg-gray-200">

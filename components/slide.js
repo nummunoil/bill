@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useEffect, useState } from "react";
 import PromptPay from "./prompt_pay";
 
 export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
@@ -36,7 +36,7 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
 
     const totalF = parseFloat(total.replace(/,/g, ""));
     const newTotal = totalF / length;
-    const checked = newTotal === Infinity ? 0 : newTotal;
+    const checked = Number.isFinite(newTotal) ? newTotal : 0;
     const rounded = Math.ceil(checked * 100) / 100;
     const formattedPay = Number(rounded).toLocaleString();
 
@@ -60,17 +60,17 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
     const length = peopleList.length - newFixIndex.length;
     const updatedList = [...peopleList];
     updatedList[indexFix].total = Number(value).toLocaleString();
-    const fixPay = newFixIndex.reduce(
-      (total, index) =>
-        total + parseFloat(updatedList[index].total.replace(/,/g, "")),
-      0
+    const fixedAmountSum = newFixIndex.reduce(
+      (sum, index) =>
+        sum + parseFloat(updatedList[index].total.replace(/,/g, "")),
+      0,
     );
     if (length <= 0) {
-      setNewTotal(Number(fixPay).toLocaleString());
+      setNewTotal(Number(fixedAmountSum).toLocaleString());
     }
     const totalF = parseFloat(total.replace(/,/g, ""));
-    const newTotal = (totalF - fixPay) / length;
-    const checked = newTotal === Infinity ? 0 : newTotal;
+    const newTotal = (totalF - fixedAmountSum) / length;
+    const checked = Number.isFinite(newTotal) ? newTotal : 0;
     const rounded = Math.ceil(checked * 100) / 100;
     const formattedPay = Number(rounded).toLocaleString();
     const newPeopleList = updatedList.map((person, index) => {
@@ -169,7 +169,7 @@ export default function SlideOver({ open, setOpen, total, setPeople, setPay }) {
                                         onChange={(e) =>
                                           fixPay(
                                             index,
-                                            e.target.value.replace(/\D/g, "")
+                                            e.target.value.replace(/\D/g, ""),
                                           )
                                         }
                                       />
